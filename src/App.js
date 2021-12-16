@@ -3,8 +3,8 @@ import './App.css';
 
 import Board from './components/Board';
 
-const player_1 = 'X';
-const player_2 = 'O';
+const player1 = 'X';
+const player2 = 'O';
 
 const generateSquares = () => {
   const squares = [];
@@ -34,6 +34,37 @@ const App = () => {
   // You will need to create a method to change the square
   //   When it is clicked on.
   //   Then pass it into the squares as a callback
+
+  // How to get playerTurn to reach Square where the square state gets updated?
+  const [playerTurn, setPlayerTurn] = useState(player1);
+
+  const onClickCallback = (markedSquare) => {
+    
+    const makeNewBoard = (squares) => {
+      const newBoard = [];
+        for (let row of squares) {
+          let newRow = [];
+          for (let square of row) {
+            if (square.id === markedSquare.id) {
+              newRow.push(markedSquare);
+            } else {
+              newRow.push(square);
+            }
+          newBoard.push(newRow);
+          newRow = [];
+          }
+        }
+      return newBoard;
+    };
+
+    setSquares(makeNewBoard(squares));
+
+    setPlayerTurn(() => {
+      return ((playerTurn === player1) ? player2 : player1);
+    });
+    console.log('in onClickCallback');
+    console.log(playerTurn);
+  };
 
   const checkForWinner = () => {
     let i = 0;
@@ -88,7 +119,7 @@ const App = () => {
         <button>Reset Game</button>
       </header>
       <main>
-        <Board squares={squares} />
+        <Board playerTurn={playerTurn} onClickCallback={onClickCallback} squares={squares} />
       </main>
     </div>
   );
