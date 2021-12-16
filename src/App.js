@@ -45,8 +45,11 @@ const App = () => {
         for (let row of squares) {
           let newRow = [];
           for (let square of row) {
-            if (square.id === markedSquare.id) {
+            if ((square.id === markedSquare.id) && (square.value === '')) {
               newRow.push(markedSquare);
+              setPlayerTurn(() => {
+                return ((playerTurn === player1) ? player2 : player1);
+              });
             } else {
               newRow.push(square);
             }
@@ -59,9 +62,6 @@ const App = () => {
 
     setSquares(makeNewBoard(squares));
 
-    setPlayerTurn(() => {
-      return ((playerTurn === player1) ? player2 : player1);
-    });
     console.log('in onClickCallback');
     console.log(playerTurn);
   };
