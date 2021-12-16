@@ -41,34 +41,28 @@ const App = () => {
   const onClickCallback = (markedSquare) => {
     
     const makeNewBoard = (squares) => {
-      const newBoard = [];
-        for (let row of squares) {
-          let newRow = [];
-          for (let square of row) {
-            if ((square.id === markedSquare.id) && (square.value === '')) {
-              newRow.push(markedSquare);
-              setPlayerTurn(() => {
-                return ((playerTurn === player1) ? player2 : player1);
-              });
-            } else {
-              newRow.push(square);
-            }
-          newBoard.push(newRow);
-          newRow = [];
+      const newBoard = [...squares];
+      for (let row of squares) {
+        for (let square of row) {
+          if ((square.id === markedSquare.id) && (square.value === '')) {
+            square.value = markedSquare.value;
+            setPlayerTurn(() => {
+                      return ((playerTurn === player1) ? player2 : player1);
+                    });
           }
         }
+      }
       return newBoard;
     };
 
     setSquares(makeNewBoard(squares));
-
-    console.log('in onClickCallback');
-    console.log(playerTurn);
+    console.log('newBoard', makeNewBoard(squares));
+    console.log('winner', checkForWinner());
   };
 
   const checkForWinner = () => {
     let i = 0;
-
+    console.log('squares', squares);
     // Check all the rows and columns for a winner
     while (i < 3) {
       if (
