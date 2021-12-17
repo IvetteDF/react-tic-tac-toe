@@ -37,9 +37,11 @@ const App = () => {
 
   // How to get playerTurn to reach Square where the square state gets updated?
   const [playerTurn, setPlayerTurn] = useState(player1);
+  const [playerTurns, setPlayerTurns] = useState(0);
+  const [winnerState, setWinnerState] = useState(null);
 
-  const onClickCallback = (markedSquare) => {
-    
+  const onClickCallback = (markedSquare) => {    
+
     const makeNewBoard = (squares) => {
       const newBoard = [...squares];
       for (let row of squares) {
@@ -47,8 +49,12 @@ const App = () => {
           if ((square.id === markedSquare.id) && (square.value === '')) {
             square.value = markedSquare.value;
             setPlayerTurn(() => {
-                      return ((playerTurn === player1) ? player2 : player1);
-                    });
+              return ((playerTurn === player1) ? player2 : player1);
+            });
+            setPlayerTurns((prevState) => {
+              return (prevState += 1);
+            });
+            console.log('playerTurns',playerTurns);
           }
         }
       }
@@ -56,8 +62,10 @@ const App = () => {
     };
 
     setSquares(makeNewBoard(squares));
-    console.log('newBoard', makeNewBoard(squares));
-    console.log('winner', checkForWinner());
+    const winner = checkForWinner();
+    if (winner) {
+      setWinnerState(winner);
+    } 
   };
 
   const checkForWinner = () => {
@@ -103,17 +111,21 @@ const App = () => {
 
   const resetGame = () => {
     // Complete in Wave 4
+    setSquares(generateSquares());
+    setPlayerTurn(player1);
+    setPlayerTurns(0);
+    setWinnerState(null);
   };
 
   return (
     <div className='App'>
       <header className='App-header'>
         <h1>React Tic Tac Toe</h1>
-        <h2>The winner is ... -- Fill in for wave 3 </h2>
-        <button>Reset Game</button>
+        <h2>The winner is {winnerState} </h2>
+        <button onClick={resetGame}>Reset Game</button>
       </header>
       <main>
-        <Board playerTurn={playerTurn} onClickCallback={onClickCallback} squares={squares} />
+        <Board winnerState={winnerState} playerTurn={playerTurn} onClickCallback={onClickCallback} squares={squares} />
       </main>
     </div>
   );

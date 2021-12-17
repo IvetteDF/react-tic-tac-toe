@@ -16,14 +16,17 @@ const Square = (props) => {
     props.onClickCallback(markedSquare);
   };
 
-  return <button onClick={onSquareClick} className='square'>{props.value}</button>;
+  return <button disabled={props.winnerState !== null} 
+  onClick={onSquareClick} className='square'>{props.value}</button>;
 };
 
 Square.propTypes = {
   value: PropTypes.string.isRequired,
   onClickCallback: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
-  playerTurn: PropTypes.string.isRequired
+  playerTurn: PropTypes.string.isRequired,
+  winnerState: PropTypes.oneOf(['X', 'O', null])
+
 };
 
 export default Square;
